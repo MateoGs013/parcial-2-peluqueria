@@ -13,6 +13,7 @@ const LINKS_POR_ROL = {
     { to: '/servicios', label: 'Servicios' },
     { to: '/empleados', label: 'Empleados' },
     { to: '/clientes', label: 'Clientes' },
+    { to: '/usuarios', label: 'Usuarios' },
   ],
   empleado: [
     { to: '/dashboard', label: 'Dashboard' },

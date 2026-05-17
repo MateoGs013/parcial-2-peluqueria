@@ -3,6 +3,15 @@
 // servidor sin base de datos.
 
 import mongoose from 'mongoose'
+import dns from 'node:dns'
+
+// MongoDB Atlas usa connection strings con prefijo "mongodb+srv://" que
+// resuelven los nodos del cluster vía un registro DNS de tipo SRV.
+// Algunos ISPs (en especial en Latinoamérica) no resuelven SRV correctamente,
+// y la conexión falla con "querySrv ECONNREFUSED".
+// Forzamos a Node a usar DNS de Cloudflare y Google solo en este proceso
+// (no toca la config del sistema) para evitar ese problema.
+dns.setServers(['1.1.1.1', '8.8.8.8'])
 
 export const conectarDB = async () => {
   try {

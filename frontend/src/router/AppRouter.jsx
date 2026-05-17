@@ -34,7 +34,15 @@ const Placeholder = ({ titulo, descripcion }) => (
 
 export function AppRouter() {
   return (
-    <BrowserRouter>
+    <BrowserRouter
+      future={{
+        // Opt-in temprano a los cambios de React Router v7 para silenciar las
+        // advertencias de "Future Flag Warning" en consola. Son cambios chicos
+        // de comportamiento interno que no afectan a esta app.
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
       <Routes>
         {/* Rutas públicas */}
         <Route path="/" element={<Landing />} />

@@ -19,7 +19,10 @@ const formatearHora = (fecha) =>
   }).format(fecha)
 
 // Filtra turnos cuya fechaHora es >= ahora y los ordena ascendente.
-const proximosTurnos = (turnos = [], cantidad = 5) => {
+// Importante usar `if (!turnos) return []` y no `(turnos = [])`: el default
+// solo se aplica con undefined, pero useFetch arranca con null mientras carga.
+const proximosTurnos = (turnos, cantidad = 5) => {
+  if (!turnos) return []
   const ahora = Date.now()
   return [...turnos]
     .filter((t) => new Date(t.fechaHora).getTime() >= ahora)
@@ -28,7 +31,8 @@ const proximosTurnos = (turnos = [], cantidad = 5) => {
 }
 
 // Suma precios de servicios de turnos completados del mes en curso.
-const ingresosDelMes = (turnos = []) => {
+const ingresosDelMes = (turnos) => {
+  if (!turnos) return 0
   const ahora = new Date()
   const desde = new Date(ahora.getFullYear(), ahora.getMonth(), 1)
   return turnos

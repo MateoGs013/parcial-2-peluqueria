@@ -12,6 +12,7 @@ import { servicioRouter } from './routes/servicio.routes.js'
 import { empleadoRouter } from './routes/empleado.routes.js'
 import { clienteRouter } from './routes/cliente.routes.js'
 import { usuarioRouter } from './routes/usuario.routes.js'
+import { turnoRouter } from './routes/turno.routes.js'
 
 export const app = express()
 
@@ -31,7 +32,7 @@ app.use('/api/servicios', servicioRouter)
 app.use('/api/empleados', empleadoRouter)
 app.use('/api/clientes', clienteRouter)
 app.use('/api/usuarios', usuarioRouter)
-// TODO: montar /api/turnos.
+app.use('/api/turnos', turnoRouter)
 
 // Manejador de errores global. Captura todo lo que tiren los controllers con
 // next(error). Debe ir DESPUÉS de todas las rutas y tener 4 parámetros para

@@ -8,6 +8,10 @@ import cors from 'cors'
 import morgan from 'morgan'
 
 import { authRouter } from './routes/auth.routes.js'
+import { servicioRouter } from './routes/servicio.routes.js'
+import { empleadoRouter } from './routes/empleado.routes.js'
+import { clienteRouter } from './routes/cliente.routes.js'
+import { usuarioRouter } from './routes/usuario.routes.js'
 
 export const app = express()
 
@@ -23,7 +27,11 @@ app.get('/api/salud', (req, res) => {
 
 // Rutas de la API
 app.use('/api/auth', authRouter)
-// TODO (Fase 3): montar /api/usuarios, /api/servicios, /api/empleados, /api/clientes y /api/turnos.
+app.use('/api/servicios', servicioRouter)
+app.use('/api/empleados', empleadoRouter)
+app.use('/api/clientes', clienteRouter)
+app.use('/api/usuarios', usuarioRouter)
+// TODO: montar /api/turnos.
 
 // Manejador de errores global. Captura todo lo que tiren los controllers con
 // next(error). Debe ir DESPUÉS de todas las rutas y tener 4 parámetros para

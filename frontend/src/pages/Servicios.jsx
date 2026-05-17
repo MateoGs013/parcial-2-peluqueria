@@ -10,15 +10,19 @@ import {
 } from '../api/servicios.api.js'
 import { useFetch } from '../hooks/useFetch.js'
 import { useAuth } from '../hooks/useAuth.js'
+import { useToast } from '../hooks/useToast.js'
 import { Modal } from '../components/Modal.jsx'
+import { ModalConfirmacion } from '../components/ModalConfirmacion.jsx'
 
 export default function Servicios() {
   const { usuario } = useAuth()
+  const toast = useToast()
   const esAdmin = usuario?.rol === 'admin'
   const { datos: servicios, cargando, error, recargar } = useFetch(() => listarServiciosAPI())
 
   const [modalAbierto, setModalAbierto] = useState(false)
   const [editando, setEditando] = useState(null)
+  const [pidiendoEliminar, setPidiendoEliminar] = useState(null)
 
   const abrirNuevo = () => {
     setEditando(null)
@@ -33,13 +37,16 @@ export default function Servicios() {
     setEditando(null)
   }
 
-  const eliminar = async (servicio) => {
-    if (!confirm(`¿Eliminar el servicio "${servicio.nombre}"?`)) return
+  const confirmarEliminar = async () => {
+    const servicio = pidiendoEliminar
     try {
       await eliminarServicioAPI(servicio._id)
+      setPidiendoEliminar(null)
       recargar()
+      toast.exito(`"${servicio.nombre}" eliminado`)
     } catch (e) {
-      alert(e.response?.data?.error || 'No se pudo eliminar')
+      setPidiendoEliminar(null)
+      toast.error(e.response?.data?.error || 'No se pudo eliminar')
     }
   }
 
@@ -86,7 +93,7 @@ export default function Servicios() {
               servicio={s}
               esAdmin={esAdmin}
               onEditar={() => abrirEditar(s)}
-              onEliminar={() => eliminar(s)}
+              onEliminar={() => setPidiendoEliminar(s)}
             />
           ))}
         </div>
@@ -102,11 +109,23 @@ export default function Servicios() {
           inicial={editando}
           onCancelar={cerrarModal}
           onGuardado={() => {
+            const fueEdicion = !!editando
             cerrarModal()
             recargar()
+            toast.exito(fueEdicion ? 'Servicio actualizado' : 'Servicio creado')
           }}
         />
       </Modal>
+
+      <ModalConfirmacion
+        abierto={!!pidiendoEliminar}
+        onCerrar={() => setPidiendoEliminar(null)}
+        onConfirmar={confirmarEliminar}
+        titulo="Eliminar servicio"
+        mensaje={`¿Seguro que querés eliminar "${pidiendoEliminar?.nombre}"? Esta acción no se puede deshacer.`}
+        textoConfirmar="Eliminar"
+        peligro
+      />
     </div>
   )
 }

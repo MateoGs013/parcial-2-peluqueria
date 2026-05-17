@@ -12,10 +12,13 @@ import {
 } from '../api/clientes.api.js'
 import { useFetch } from '../hooks/useFetch.js'
 import { useAuth } from '../hooks/useAuth.js'
+import { useToast } from '../hooks/useToast.js'
 import { Modal } from '../components/Modal.jsx'
+import { ModalConfirmacion } from '../components/ModalConfirmacion.jsx'
 
 export default function Clientes() {
   const { usuario } = useAuth()
+  const toast = useToast()
   const esAdmin = usuario?.rol === 'admin'
 
   // Buscador con debounce. "busquedaInput" es lo que tipea el usuario en
@@ -36,6 +39,7 @@ export default function Clientes() {
 
   const [modalAbierto, setModalAbierto] = useState(false)
   const [editando, setEditando] = useState(null)
+  const [pidiendoEliminar, setPidiendoEliminar] = useState(null)
 
   const abrirNuevo = () => {
     setEditando(null)
@@ -50,13 +54,16 @@ export default function Clientes() {
     setEditando(null)
   }
 
-  const eliminar = async (cliente) => {
-    if (!confirm(`¿Eliminar al cliente "${cliente.nombre}"?`)) return
+  const confirmarEliminar = async () => {
+    const cliente = pidiendoEliminar
     try {
       await eliminarClienteAPI(cliente._id)
+      setPidiendoEliminar(null)
       recargar()
+      toast.exito(`"${cliente.nombre}" eliminado`)
     } catch (e) {
-      alert(e.response?.data?.error || 'No se pudo eliminar')
+      setPidiendoEliminar(null)
+      toast.error(e.response?.data?.error || 'No se pudo eliminar')
     }
   }
 
@@ -107,7 +114,7 @@ export default function Clientes() {
               cliente={c}
               esAdmin={esAdmin}
               onEditar={() => abrirEditar(c)}
-              onEliminar={() => eliminar(c)}
+              onEliminar={() => setPidiendoEliminar(c)}
             />
           ))}
         </ul>
@@ -122,11 +129,23 @@ export default function Clientes() {
           inicial={editando}
           onCancelar={cerrarModal}
           onGuardado={() => {
+            const fueEdicion = !!editando
             cerrarModal()
             recargar()
+            toast.exito(fueEdicion ? 'Cliente actualizado' : 'Cliente creado')
           }}
         />
       </Modal>
+
+      <ModalConfirmacion
+        abierto={!!pidiendoEliminar}
+        onCerrar={() => setPidiendoEliminar(null)}
+        onConfirmar={confirmarEliminar}
+        titulo="Eliminar cliente"
+        mensaje={`¿Seguro que querés eliminar a "${pidiendoEliminar?.nombre}"? Esta acción no se puede deshacer.`}
+        textoConfirmar="Eliminar"
+        peligro
+      />
     </div>
   )
 }

@@ -10,15 +10,19 @@ import {
   eliminarEmpleadoAPI,
 } from '../api/empleados.api.js'
 import { useFetch } from '../hooks/useFetch.js'
+import { useToast } from '../hooks/useToast.js'
 import { Modal } from '../components/Modal.jsx'
+import { ModalConfirmacion } from '../components/ModalConfirmacion.jsx'
 
 export default function Empleados() {
+  const toast = useToast()
   const { datos: empleados, cargando, error, recargar } = useFetch(() =>
     listarEmpleadosAPI()
   )
 
   const [modalAbierto, setModalAbierto] = useState(false)
   const [editando, setEditando] = useState(null)
+  const [pidiendoEliminar, setPidiendoEliminar] = useState(null)
 
   const abrirNuevo = () => {
     setEditando(null)
@@ -33,13 +37,16 @@ export default function Empleados() {
     setEditando(null)
   }
 
-  const eliminar = async (empleado) => {
-    if (!confirm(`¿Eliminar al empleado "${empleado.nombre}"?`)) return
+  const confirmarEliminar = async () => {
+    const empleado = pidiendoEliminar
     try {
       await eliminarEmpleadoAPI(empleado._id)
+      setPidiendoEliminar(null)
       recargar()
+      toast.exito(`"${empleado.nombre}" eliminado`)
     } catch (e) {
-      alert(e.response?.data?.error || 'No se pudo eliminar')
+      setPidiendoEliminar(null)
+      toast.error(e.response?.data?.error || 'No se pudo eliminar')
     }
   }
 
@@ -81,7 +88,7 @@ export default function Empleados() {
               empleado={emp}
               indice={i}
               onEditar={() => abrirEditar(emp)}
-              onEliminar={() => eliminar(emp)}
+              onEliminar={() => setPidiendoEliminar(emp)}
             />
           ))}
         </div>
@@ -96,11 +103,23 @@ export default function Empleados() {
           inicial={editando}
           onCancelar={cerrarModal}
           onGuardado={() => {
+            const fueEdicion = !!editando
             cerrarModal()
             recargar()
+            toast.exito(fueEdicion ? 'Empleado actualizado' : 'Empleado creado')
           }}
         />
       </Modal>
+
+      <ModalConfirmacion
+        abierto={!!pidiendoEliminar}
+        onCerrar={() => setPidiendoEliminar(null)}
+        onConfirmar={confirmarEliminar}
+        titulo="Eliminar empleado"
+        mensaje={`¿Seguro que querés eliminar a "${pidiendoEliminar?.nombre}"? Esta acción no se puede deshacer.`}
+        textoConfirmar="Eliminar"
+        peligro
+      />
     </div>
   )
 }

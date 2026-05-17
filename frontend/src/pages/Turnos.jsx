@@ -16,7 +16,9 @@ import { listarEmpleadosAPI } from '../api/empleados.api.js'
 import { listarServiciosAPI } from '../api/servicios.api.js'
 import { useFetch } from '../hooks/useFetch.js'
 import { useAuth } from '../hooks/useAuth.js'
+import { useToast } from '../hooks/useToast.js'
 import { Modal } from '../components/Modal.jsx'
+import { ModalConfirmacion } from '../components/ModalConfirmacion.jsx'
 
 // ─── Helpers de fecha ──────────────────────────────────────────────────────
 
@@ -69,6 +71,7 @@ const CLASES_BADGE_ESTADO = {
 
 export default function Turnos() {
   const { usuario } = useAuth()
+  const toast = useToast()
   const esCliente = usuario?.rol === 'cliente'
   const puedeGestionar = usuario?.rol === 'admin' || usuario?.rol === 'empleado'
 
@@ -93,6 +96,7 @@ export default function Turnos() {
 
   const [modalAbierto, setModalAbierto] = useState(false)
   const [editando, setEditando] = useState(null)
+  const [pidiendoEliminar, setPidiendoEliminar] = useState(null)
 
   const abrirNuevo = () => {
     setEditando(null)
@@ -111,18 +115,22 @@ export default function Turnos() {
     try {
       await actualizarTurnoAPI(turno._id, { estado: nuevoEstado })
       recargar()
+      toast.exito(`Turno marcado como ${nuevoEstado}`)
     } catch (e) {
-      alert(e.response?.data?.error || 'No se pudo cambiar el estado')
+      toast.error(e.response?.data?.error || 'No se pudo cambiar el estado')
     }
   }
 
-  const eliminar = async (turno) => {
-    if (!confirm('¿Eliminar este turno?')) return
+  const confirmarEliminar = async () => {
+    const turno = pidiendoEliminar
     try {
       await eliminarTurnoAPI(turno._id)
+      setPidiendoEliminar(null)
       recargar()
+      toast.exito('Turno eliminado')
     } catch (e) {
-      alert(e.response?.data?.error || 'No se pudo eliminar')
+      setPidiendoEliminar(null)
+      toast.error(e.response?.data?.error || 'No se pudo eliminar')
     }
   }
 
@@ -220,7 +228,7 @@ export default function Turnos() {
                     puedeGestionar={puedeGestionar}
                     onEditar={() => abrirEditar(turno)}
                     onCambiarEstado={(estado) => cambiarEstado(turno, estado)}
-                    onEliminar={() => eliminar(turno)}
+                    onEliminar={() => setPidiendoEliminar(turno)}
                   />
                 ))}
               </ul>
@@ -240,12 +248,24 @@ export default function Turnos() {
             inicial={editando}
             onCancelar={cerrarModal}
             onGuardado={() => {
+              const fueEdicion = !!editando
               cerrarModal()
               recargar()
+              toast.exito(fueEdicion ? 'Turno actualizado' : 'Turno creado')
             }}
           />
         </Modal>
       )}
+
+      <ModalConfirmacion
+        abierto={!!pidiendoEliminar}
+        onCerrar={() => setPidiendoEliminar(null)}
+        onConfirmar={confirmarEliminar}
+        titulo="Eliminar turno"
+        mensaje="¿Seguro que querés eliminar este turno? Esta acción no se puede deshacer."
+        textoConfirmar="Eliminar"
+        peligro
+      />
     </div>
   )
 }

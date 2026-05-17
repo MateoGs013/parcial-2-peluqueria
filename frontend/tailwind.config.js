@@ -25,6 +25,15 @@ export default {
       borderWidth: {
         3: '3px',
       },
+      keyframes: {
+        deslizar: {
+          '0%': { transform: 'translateX(110%)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+      },
+      animation: {
+        deslizar: 'deslizar 0.25s cubic-bezier(0.2, 0.9, 0.3, 1)',
+      },
     },
   },
   plugins: [],

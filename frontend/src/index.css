@@ -1,3 +1,84 @@
+/* Fuentes desde Google Fonts. El display=swap evita FOIT (texto invisible
+   mientras carga la fuente) usando un fallback hasta que llega la fuente real. */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    @apply bg-crema text-negro;
+  }
+  body {
+    @apply font-sans antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display tracking-tight;
+  }
+}
+
+@layer components {
+  /* Botón base neo-brutalista. Las clases btn-primario / btn-secundario /
+     btn-peligro se aplican encima para dar el color. */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-3 font-display font-bold uppercase tracking-tight border-3 border-negro shadow-bruta transition-all duration-100 cursor-pointer select-none;
+  }
+  .btn:hover:not(:disabled) {
+    @apply shadow-bruta-sm translate-x-[4px] translate-y-[4px];
+  }
+  .btn:active:not(:disabled) {
+    @apply shadow-none translate-x-[6px] translate-y-[6px];
+  }
+  .btn:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+  .btn-primario {
+    @apply bg-azul-faro text-white;
+  }
+  .btn-secundario {
+    @apply bg-white text-negro;
+  }
+  .btn-peligro {
+    @apply bg-rojo-faro text-white;
+  }
+  .btn-aceptar {
+    @apply bg-negro text-white;
+  }
+
+  /* Inputs y campos de formulario. */
+  .input {
+    @apply w-full px-4 py-3 bg-white border-3 border-negro font-sans text-negro placeholder:text-negro/40 focus:outline-none focus:shadow-bruta-sm transition-all duration-100;
+  }
+  .label {
+    @apply block font-display font-bold uppercase text-sm tracking-tight mb-2;
+  }
+
+  /* Card base. */
+  .card {
+    @apply bg-white border-3 border-negro shadow-bruta p-6;
+  }
+
+  /* Badge / chip para estados, roles, etc. */
+  .badge {
+    @apply inline-flex items-center px-2 py-1 font-mono text-xs font-bold uppercase border-2 border-negro;
+  }
+  .badge-pendiente {
+    @apply bg-crema text-negro;
+  }
+  .badge-confirmado {
+    @apply bg-azul-faro text-white;
+  }
+  .badge-completado {
+    @apply bg-negro text-white;
+  }
+  .badge-cancelado {
+    @apply bg-rojo-faro text-white;
+  }
+}

@@ -80,66 +80,107 @@ export default function Usuarios() {
       )}
 
       {usuarios && usuarios.length > 0 && (
-        <div className="card !p-0 overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-negro text-white">
-                <th className="text-left px-4 py-3 font-mono text-xs uppercase tracking-tight">
-                  Nombre
-                </th>
-                <th className="text-left px-4 py-3 font-mono text-xs uppercase tracking-tight">
-                  Email
-                </th>
-                <th className="text-left px-4 py-3 font-mono text-xs uppercase tracking-tight">
-                  Rol
-                </th>
-                <th className="text-right px-4 py-3 font-mono text-xs uppercase tracking-tight">
-                  Acciones
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {usuarios.map((u, i) => (
-                <tr
-                  key={u._id}
-                  className={`border-t-2 border-negro ${i % 2 === 0 ? 'bg-white' : 'bg-crema'}`}
-                >
-                  <td className="px-4 py-3 font-display font-bold uppercase tracking-tight">
-                    {u.nombre}
-                    {u._id === yo?.id && (
-                      <span className="badge badge-confirmado ml-2 !py-0 text-[10px]">Vos</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 font-mono text-sm break-all">{u.email}</td>
-                  <td className="px-4 py-3">
-                    <span className={`badge ${COLORES_ROL[u.rol] || 'badge-pendiente'}`}>
-                      {u.rol}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex gap-2 justify-end">
-                      <button
-                        onClick={() => abrirEditar(u)}
-                        className="btn btn-secundario !px-3 !py-2 text-xs"
-                      >
-                        Editar
-                      </button>
-                      {/* Evitamos que el admin se auto-elimine y se quede afuera */}
-                      {u._id !== yo?.id && (
-                        <button
-                          onClick={() => setPidiendoEliminar(u)}
-                          className="btn btn-peligro !px-3 !py-2 text-xs"
-                        >
-                          ✕
-                        </button>
+        <>
+          {/* Vista mobile: cards apiladas (la tabla no entra prolijamente). */}
+          <ul className="lg:hidden space-y-3">
+            {usuarios.map((u) => (
+              <li key={u._id} className="card !p-4 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-display font-bold uppercase tracking-tight line-clamp-1 break-words">
+                      {u.nombre}
+                      {u._id === yo?.id && (
+                        <span className="badge badge-confirmado ml-2 !py-0 text-[10px]">Vos</span>
                       )}
-                    </div>
-                  </td>
+                    </h3>
+                    <p className="font-mono text-xs mt-1 truncate">{u.email}</p>
+                  </div>
+                  <span className={`badge ${COLORES_ROL[u.rol] || 'badge-pendiente'} shrink-0`}>
+                    {u.rol}
+                  </span>
+                </div>
+                <div className="flex gap-2 pt-3 border-t-2 border-negro">
+                  <button
+                    onClick={() => abrirEditar(u)}
+                    className="btn btn-secundario !px-3 !py-2 text-xs flex-1"
+                  >
+                    Editar
+                  </button>
+                  {u._id !== yo?.id && (
+                    <button
+                      onClick={() => setPidiendoEliminar(u)}
+                      className="btn btn-peligro !px-3 !py-2 text-xs"
+                    >
+                      Eliminar
+                    </button>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          {/* Vista desktop: tabla brutalista. */}
+          <div className="hidden lg:block card !p-0 overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-negro text-white">
+                  <th className="text-left px-4 py-3 font-mono text-xs uppercase tracking-tight">
+                    Nombre
+                  </th>
+                  <th className="text-left px-4 py-3 font-mono text-xs uppercase tracking-tight">
+                    Email
+                  </th>
+                  <th className="text-left px-4 py-3 font-mono text-xs uppercase tracking-tight">
+                    Rol
+                  </th>
+                  <th className="text-right px-4 py-3 font-mono text-xs uppercase tracking-tight">
+                    Acciones
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {usuarios.map((u, i) => (
+                  <tr
+                    key={u._id}
+                    className={`border-t-2 border-negro ${i % 2 === 0 ? 'bg-white' : 'bg-crema'}`}
+                  >
+                    <td className="px-4 py-3 font-display font-bold uppercase tracking-tight">
+                      <span className="line-clamp-1 break-words">{u.nombre}</span>
+                      {u._id === yo?.id && (
+                        <span className="badge badge-confirmado ml-2 !py-0 text-[10px]">Vos</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 font-mono text-sm break-all max-w-xs">{u.email}</td>
+                    <td className="px-4 py-3">
+                      <span className={`badge ${COLORES_ROL[u.rol] || 'badge-pendiente'}`}>
+                        {u.rol}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex gap-2 justify-end">
+                        <button
+                          onClick={() => abrirEditar(u)}
+                          className="btn btn-secundario !px-3 !py-2 text-xs"
+                        >
+                          Editar
+                        </button>
+                        {/* Evitamos que el admin se auto-elimine y se quede afuera */}
+                        {u._id !== yo?.id && (
+                          <button
+                            onClick={() => setPidiendoEliminar(u)}
+                            className="btn btn-peligro !px-3 !py-2 text-xs"
+                          >
+                            ✕
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
 
       <Modal

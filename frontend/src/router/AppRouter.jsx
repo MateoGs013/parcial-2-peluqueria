@@ -15,6 +15,7 @@ import Dashboard from '../pages/Dashboard.jsx'
 import Perfil from '../pages/Perfil.jsx'
 import Usuarios from '../pages/Usuarios.jsx'
 import Reservar from '../pages/Reservar.jsx'
+import NotFound from '../pages/NotFound.jsx'
 
 const Placeholder = ({ titulo, descripcion }) => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 p-8 text-center">
@@ -99,7 +100,7 @@ export function AppRouter() {
           <Route path="/clientes" element={<Clientes />} />
         </Route>
 
-        <Route path="*" element={<Placeholder titulo="404" descripcion="Ruta no encontrada" />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )

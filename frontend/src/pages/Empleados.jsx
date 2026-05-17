@@ -141,19 +141,19 @@ function CardEmpleado({ empleado, indice, onEditar, onEliminar }) {
         <p className="font-mono text-xs uppercase text-white/80 tracking-tight">
           {empleado.activo ? 'Activo' : 'Inactivo'}
         </p>
-        <p className="font-display font-bold text-white text-xl uppercase tracking-tighter leading-tight">
+        <p className="font-display font-bold text-white text-xl uppercase tracking-tighter leading-tight line-clamp-2 break-words">
           {empleado.especialidad}
         </p>
       </div>
       <div className="p-5 space-y-2">
-        <h3 className="font-display font-bold text-2xl uppercase tracking-tight leading-tight">
+        <h3 className="font-display font-bold text-2xl uppercase tracking-tight leading-tight line-clamp-2 break-words">
           {empleado.nombre}
         </h3>
         {empleado.email && (
-          <p className="font-mono text-xs break-all">{empleado.email}</p>
+          <p className="font-mono text-xs truncate">{empleado.email}</p>
         )}
         {empleado.telefono && (
-          <p className="font-mono text-xs">{empleado.telefono}</p>
+          <p className="font-mono text-xs truncate">{empleado.telefono}</p>
         )}
         {empleado.usuario && (
           <span className="badge badge-confirmado mt-2 inline-block">Tiene cuenta</span>

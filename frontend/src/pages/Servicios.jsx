@@ -134,15 +134,15 @@ function CardServicio({ servicio, esAdmin, onEditar, onEliminar }) {
   return (
     <article className="card hover:rotate-[-1deg] transition-transform duration-150">
       <div className="flex items-start justify-between gap-2 mb-3">
-        <h3 className="font-display font-bold text-2xl uppercase tracking-tight leading-tight">
+        <h3 className="font-display font-bold text-2xl uppercase tracking-tight leading-tight line-clamp-2 break-words min-w-0">
           {servicio.nombre}
         </h3>
         {!servicio.activo && (
-          <span className="badge badge-cancelado">Inactivo</span>
+          <span className="badge badge-cancelado shrink-0">Inactivo</span>
         )}
       </div>
       {servicio.descripcion && (
-        <p className="font-sans text-sm text-negro/70 mb-4">{servicio.descripcion}</p>
+        <p className="font-sans text-sm text-negro/70 mb-4 line-clamp-3">{servicio.descripcion}</p>
       )}
       <div className="flex items-end justify-between gap-4 mt-auto">
         <div>

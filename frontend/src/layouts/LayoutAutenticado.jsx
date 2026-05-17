@@ -4,6 +4,7 @@
 
 import { NavLink, Outlet, Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth.js'
+import { BottomNav } from '../components/BottomNav.jsx'
 
 // Links que aparecen en el nav según el rol del usuario logueado.
 const LINKS_POR_ROL = {
@@ -39,18 +40,23 @@ export function LayoutAutenticado() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    // pb-20 en mobile reserva espacio para el BottomNav fijo (h ~ 4.5rem).
+    <div className="min-h-screen flex flex-col pb-20 lg:pb-0">
       <header className="sticky top-0 z-40 bg-crema border-b-3 border-negro">
         <div className="px-4 lg:px-8 py-3 flex items-center gap-4 lg:gap-8">
-          {/* Logo */}
-          <Link to="/dashboard" className="font-display font-bold text-lg lg:text-xl uppercase tracking-tighter shrink-0">
-            <span className="text-rojo-faro">✂</span> Peluquería
+          {/* Logo — compacto en mobile (solo el "✂" + "P SaaS"), completo en desktop */}
+          <Link
+            to="/dashboard"
+            className="font-display font-bold text-lg lg:text-xl uppercase tracking-tighter shrink-0"
+          >
+            <span className="text-rojo-faro">✂</span>
+            <span className="hidden sm:inline"> Peluquería</span>
             <span className="text-azul-faro"> SaaS</span>
           </Link>
 
-          {/* Nav — scrolleable en mobile para no apretar */}
-          <nav className="flex-1 overflow-x-auto">
-            <ul className="flex gap-1 lg:gap-2 min-w-max">
+          {/* Nav horizontal — solo desktop. En mobile usamos el BottomNav. */}
+          <nav className="hidden lg:block flex-1">
+            <ul className="flex gap-2">
               {links.map((link) => (
                 <li key={link.to}>
                   <NavLink
@@ -71,7 +77,7 @@ export function LayoutAutenticado() {
           </nav>
 
           {/* Usuario + logout */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-3 shrink-0 ml-auto">
             <div className="hidden md:block text-right">
               <p className="font-display font-bold text-sm uppercase leading-tight">
                 {usuario?.nombre}
@@ -90,6 +96,8 @@ export function LayoutAutenticado() {
       <main className="flex-1">
         <Outlet />
       </main>
+
+      <BottomNav />
     </div>
   )
 }

@@ -344,16 +344,16 @@ function CardTurno({ turno, puedeGestionar, onEditar, onCambiarEstado, onElimina
           <div className="flex items-center gap-2 flex-wrap mb-1">
             <span className={`badge ${claseBadge}`}>{turno.estado}</span>
           </div>
-          <h3 className="font-display font-bold text-xl uppercase tracking-tight leading-tight">
+          <h3 className="font-display font-bold text-xl uppercase tracking-tight leading-tight line-clamp-1 break-words">
             {turno.cliente?.nombre || '—'}
           </h3>
-          <p className="font-sans text-sm mt-1">
+          <p className="font-sans text-sm mt-1 line-clamp-2 break-words">
             <span className="font-mono text-xs uppercase text-negro/60">→</span>{' '}
             {turno.servicio?.nombre} ·{' '}
             <span className="text-negro/70">{turno.empleado?.nombre}</span>
           </p>
           {turno.notas && (
-            <p className="font-mono text-xs mt-1 text-negro/70">{turno.notas}</p>
+            <p className="font-mono text-xs mt-1 text-negro/70 line-clamp-2">{turno.notas}</p>
           )}
         </div>
 

@@ -99,7 +99,7 @@ export default function Reservar() {
                 onClick={() => setServicioId(s._id)}
                 color="azul"
               >
-                <h3 className="font-display font-bold text-xl uppercase tracking-tight leading-tight">
+                <h3 className="font-display font-bold text-xl uppercase tracking-tight leading-tight line-clamp-2 break-words">
                   {s.nombre}
                 </h3>
                 {s.descripcion && (
@@ -130,10 +130,10 @@ export default function Reservar() {
                 onClick={() => setEmpleadoId(e._id)}
                 color="rojo"
               >
-                <h3 className="font-display font-bold text-xl uppercase tracking-tight leading-tight">
+                <h3 className="font-display font-bold text-xl uppercase tracking-tight leading-tight line-clamp-2 break-words">
                   {e.nombre}
                 </h3>
-                <p className="font-mono text-xs uppercase mt-1 opacity-80">
+                <p className="font-mono text-xs uppercase mt-1 opacity-80 line-clamp-2">
                   {e.especialidad}
                 </p>
               </Seleccionable>
@@ -177,7 +177,7 @@ export default function Reservar() {
             {errorGlobal ? (
               <p className="font-mono text-xs uppercase text-rojo-faro">{errorGlobal}</p>
             ) : (
-              <p className="font-mono text-xs uppercase tracking-tight">
+              <p className="font-mono text-xs uppercase tracking-tight line-clamp-2 break-words">
                 <span className="text-negro/60">Resumen:</span>{' '}
                 <span className="font-bold">
                   {servicioElegido?.nombre || '— servicio —'} ·{' '}

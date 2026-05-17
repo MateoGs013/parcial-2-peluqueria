@@ -7,6 +7,8 @@ import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 
+import { authRouter } from './routes/auth.routes.js'
+
 export const app = express()
 
 // Middlewares globales
@@ -19,4 +21,15 @@ app.get('/api/salud', (req, res) => {
   res.json({ ok: true, mensaje: 'API funcionando' })
 })
 
-// TODO (próximas fases): montar las rutas de auth, usuarios, servicios, empleados, clientes y turnos.
+// Rutas de la API
+app.use('/api/auth', authRouter)
+// TODO (Fase 3): montar /api/usuarios, /api/servicios, /api/empleados, /api/clientes y /api/turnos.
+
+// Manejador de errores global. Captura todo lo que tiren los controllers con
+// next(error). Debe ir DESPUÉS de todas las rutas y tener 4 parámetros para
+// que Express lo identifique como handler de errores.
+app.use((error, req, res, next) => {
+  console.error(error)
+  const status = error.status || 500
+  res.status(status).json({ error: error.message || 'Error del servidor' })
+})

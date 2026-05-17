@@ -72,7 +72,8 @@ parcial-2-peluqueria/
 │   │   ├── hooks/          useAuth, useFetch
 │   │   ├── layouts/        LayoutAutenticado (header con nav + outlet)
 │   │   ├── pages/          Landing, Login, Registro, Dashboard, Turnos,
-│   │   │                   Servicios, Empleados, Clientes, Perfil
+│   │   │                   Servicios, Empleados, Clientes, Usuarios,
+│   │   │                   Reservar, Perfil
 │   │   ├── router/         AppRouter
 │   │   ├── App.jsx
 │   │   ├── main.jsx
@@ -206,6 +207,7 @@ Los endpoints protegidos requieren el header `Authorization: Bearer <token>` que
 | POST | `/auth/registro` | `{ nombre, email, password }` | público | Crea un usuario con rol `cliente` y devuelve token |
 | POST | `/auth/login` | `{ email, password }` | público | Inicia sesión y devuelve token |
 | GET | `/auth/yo` | — | autenticado | Devuelve los datos del usuario del token |
+| GET | `/auth/mi-cliente` | — | autenticado | Devuelve el `Cliente` vinculado al usuario. Si no existe, lo crea lazy con `nombre` y `email` del User. |
 
 ### Servicios
 
@@ -337,9 +339,8 @@ Estas son cosas que **no** hicimos a propósito para acotar el alcance del parci
 - **No hay tests automatizados** — la consigna no los pide y el tiempo se invirtió en cobertura funcional.
 - **No hay CI/CD, Docker ni deploy** — fuera del alcance del parcial.
 - **No hay refresh tokens** — el JWT simple con expiración de 7 días alcanza para el caso de uso.
-- **El perfil es read-only** — para cambiar la contraseña hay que ir por el endpoint admin-only `PUT /api/usuarios/:id`.
-- **El cliente no puede reservar desde el front** — el flujo "reserva pública" se redirige a `/registro` y luego el admin/empleado carga el turno. Implementar reservas autogestionadas requeriría un endpoint para vincular automáticamente un User cliente a un perfil Cliente, fuera del alcance.
-- **El empleado ve todos los turnos**, no solo los suyos. En una versión más madura se filtraría también para el rol empleado.
+- **El perfil es read-only** — para cambiar la contraseña hay que ir por el endpoint admin-only `PUT /api/usuarios/:id` o desde la página `/usuarios` (admin).
+- **El empleado ve todos los turnos**, no solo los suyos asignados. En una versión más madura se filtraría también para el rol empleado.
 
 ---
 

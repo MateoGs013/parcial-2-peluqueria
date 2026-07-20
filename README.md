@@ -2,7 +2,11 @@
 
 Sistema fullstack MERN para gestión de una peluquería: turnos, servicios, empleados y clientes, con autenticación por roles y una identidad visual neo-brutalista inspirada en el faro tradicional de peluquería (barber pole).
 
-**Parcial 2 — Aplicaciones Híbridas — Da Vinci**
+**🔗 Demo en vivo: [parcial-2-peluqueria.vercel.app](https://parcial-2-peluqueria.vercel.app/)**
+
+![barberpole — landing](docs/preview-hero.png)
+
+*Origen: Parcial 2 — Aplicaciones Híbridas — Da Vinci*
 
 ---
 
